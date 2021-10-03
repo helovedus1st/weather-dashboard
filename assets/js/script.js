@@ -14,7 +14,6 @@ function getLatLong(event) {
     var city = searchInput.value.trim();
 
     var coordinatesUrl = rootUrl + '/geo/1.0/direct?q=' + city + "&limit=5&appid=" + apiKey;
-    console.log(city);
 
     fetch(coordinatesUrl)
         .then(function (response) {
@@ -25,12 +24,31 @@ function getLatLong(event) {
             console.log(data[0].lat, data[0].lon);
             getWeather(data[0].lat, data[0].lon);
         });
-
 }
 
 function getWeather(lat, lon) {
     console.log('inside getWeather() function');
     console.log (lat, lon);
+
+    var cityUrl = rootUrl + '/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&units=imperial' + '&appid=' + apiKey
+    console.log (cityUrl)
+
+    fetch(cityUrl)
+    .then(function (response) {
+        return response.json();
+    })
+    .then(function (data) {
+        console.log(data);
+        showCurrent(data.current.temp, data.current.wind_speed, data.current.humidity, data.current.dt, data.current.uvi)
+    });
+}
+
+function showCurrent(temp, wind, humidity, weatherDate, uvi) {
+        var city = searchInput.value.trim();
+    console.log(temp, wind, humidity, weatherDate, uvi, city);
+        var convertedDate = new Date(weatherDate).toLocaleTimeString("en-US");
+        console.log(weatherDate);
+        console.log(convertedDate);
 }
 
 searchForm.addEventListener('submit', getLatLong);
