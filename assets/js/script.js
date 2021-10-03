@@ -51,16 +51,13 @@ function getWeather(lat, lon) {
 
 function showCurrent(temp, wind, humidity, weatherDate, uvi) {
         var city = searchInput.value.trim();
-        cityFound.textContent = city;
-        tempFound.textContent = temp + '°F';
-        windFound.textContent = wind;
-        humidityFound.textContent = humidity;
-        uviFound.textContent = uvi;
-
-    console.log(temp, wind, humidity, weatherDate, uvi, city);
         var convertedDate = new Date(weatherDate*1000).toLocaleString("en-US");
-        console.log(weatherDate);
-        console.log(convertedDate);
+        cityFound.textContent = city + ' (' + convertedDate + ')';
+        tempFound.textContent = temp + '°F';
+        windFound.textContent = wind + 'mph';
+        humidityFound.textContent = humidity + '%';
+        uviFound.textContent = uvi;
+    
 }
 
 searchForm.addEventListener('submit', getLatLong);
