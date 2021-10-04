@@ -26,22 +26,28 @@ var revealAllFound = document.querySelector("#all-found");
 function getLatLong(event) {
     event.preventDefault();
     console.log(event);
-    revealAllFound.classList.remove("d-none");
     var city = searchInput.value.trim();
 
     var coordinatesUrl = rootUrl + '/geo/1.0/direct?q=' + city + "&limit=5&appid=" + apiKey;
 
     fetch(coordinatesUrl)
         .then(function (response) {
+            console.log(response);
+
+            if (response.status !== 200) {
+                alert('Please enter a valid city name and try again.');
+                return;
+            } else {
             return response.json();
-        })
-        .then(function (data) {
-            console.log(data);
-            console.log(data[0].lat, data[0].lon);
-            getWeather(data[0].lat, data[0].lon);
-            getFutureWeather1(data[0].lat, data[0].lon);
+        
+            .then(function (data) {
+                console.log(data);
+                console.log(data[0].lat, data[0].lon);
+                getWeather(data[0].lat, data[0].lon);
+                getFutureWeather1(data[0].lat, data[0].lon);
+                makeHistoryButton(data[0].lat, data[0].lon);
         });
-}
+}}
 
 function getWeather(lat, lon) {
     console.log('inside getWeather() function');
@@ -106,13 +112,19 @@ function showFuture(futureTemp, futureWind, futureHumidity, futureDate, futureFo
     var futureTempFound = document.querySelector('#futureTemp' + i);
     var futureWindFound = document.querySelector('#futureWind' + i);
     var futureHumidityFound = document.querySelector('#futureHumidity' + i);
-        var convertedDate = new Date(futureDate*1000).toLocaleDateString("en-US");
-        futureDateFound.textContent = convertedDate;
-        futureTempFound.textContent = futureTemp + '°F';
-        futureWindFound.textContent = futureWind + ' mph';
-        futureHumidityFound.textContent = futureHumidity + '%';
-        futureForecastFound.textContent = futureForecast;
-        futureIconFound.src = "http://openweathermap.org/img/wn/" + futureIcon +"@4x.png";
+
+    // source date data must be converted from unix timestamp to US format
+    var convertedDate = new Date(futureDate*1000).toLocaleDateString("en-US");
+    futureDateFound.textContent = convertedDate;
+
+    futureTempFound.textContent = futureTemp + '°F';
+    futureWindFound.textContent = futureWind + ' mph';
+    futureHumidityFound.textContent = futureHumidity + '%';
+    futureForecastFound.textContent = futureForecast;
+    futureIconFound.src = "http://openweathermap.org/img/wn/" + futureIcon +"@4x.png";
+    
+    // reveal hidden content elements after acquiring data
+    revealAllFound.classList.remove("d-none");
     
 }
 
