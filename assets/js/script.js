@@ -13,6 +13,7 @@ var tempFound = document.querySelector('#temp');
 var windFound = document.querySelector('#wind');
 var humidityFound = document.querySelector('#humidity');
 var uviFound = document.querySelector('#uvi')
+var dateFound = document.querySelector('#todays-date')
 
 function getLatLong(event) {
     event.preventDefault();
@@ -51,10 +52,11 @@ function getWeather(lat, lon) {
 
 function showCurrent(temp, wind, humidity, weatherDate, uvi) {
         var city = searchInput.value.trim();
-        var convertedDate = new Date(weatherDate*1000).toLocaleString("en-US");
-        cityFound.textContent = city + ' (' + convertedDate + ')';
+        var convertedDate = new Date(weatherDate*1000).toLocaleDateString("en-US");
+        dateFound.textContent = convertedDate;
+        cityFound.textContent = city;
         tempFound.textContent = temp + '°F';
-        windFound.textContent = wind + 'mph';
+        windFound.textContent = wind + ' mph';
         humidityFound.textContent = humidity + '%';
         uviFound.textContent = uvi;
     
