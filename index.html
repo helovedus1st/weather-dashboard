@@ -55,7 +55,7 @@
           <div class="list-group" id="history"></div>
         </aside>
 
-        <div class="col-lg-9 pb-3">
+        <div id='all-found' class="col-lg-9 pb-3 d-none">
           <section
             id="today"
             class="mt-3 border border-info"
@@ -89,64 +89,64 @@
             role="region"
             aria-live="polite"
           >
-            <div class="card col-2 pb-3" style="background-color: #94c8d8">
+            <div class="card col-lg-2 col-sm-12 pb-3" style="background-color: #94c8d8">
               <img id='futureIcon1' src="" class="card-img-top" alt="weather icon">
               <div class="card-body text-center">
                 <h5 class="card-title"><span id='futureDate1'>10/4/2021</span></h5>
                 <p class="card-text"><span id='futureForecast1'></span></p>
               </div>
                 <ul class="list-group list-group-flush">              
-                  <li class="list-group-item">Temp: <span id='futureTemp1'></li>
-                  <li class="list-group-item">Wind: <span id='futureWind1'></li>
-                  <li class="list-group-item">Humidity: <span id='futureHumidity1'></li>
+                  <li class="list-group-item">Temp:&nbsp;&nbsp;<span id='futureTemp1'></li>
+                  <li class="list-group-item">Wind:&nbsp;&nbsp;<span id='futureWind1'></li>
+                  <li class="list-group-item">Humidity:&nbsp;&nbsp;<span id='futureHumidity1'></li>
               </ul>
             </div>
-            <div class="card col-2 pb-3" style="background-color: #94c8d8">
-              <img id='futureIcon2' src="http://openweathermap.org/img/wn/10d@2x.png" class="card-img-top" alt="weather icon">
+            <div class="card col-lg-2 col-sm-12 pb-3" style="background-color: #94c8d8">
+              <img id='futureIcon2' src="" class="card-img-top" alt="weather icon">
               <div class="card-body">
                 <h5 class="card-title"><span id='futureDate2'>10/4/2021</span></h5>
                 <p class="card-text"><span id='futureForecast2'></span></p>
               </div>
                 <ul class="list-group list-group-flush">              
                   <li class="list-group-item">Temp: <span id='futureTemp2'></li>
-                  <li class="list-group-item">Wind: <span id='futureWind2'></li>
-                  <li class="list-group-item">Humidity: <span id='futureHumidity2'></li>
+                  <li class="list-group-item">Wind:&nbsp;&nbsp;<span id='futureWind2'></li>
+                  <li class="list-group-item">Humidity:&nbsp;&nbsp;<span id='futureHumidity2'></li>
               </ul>
             </div>
-            <div class="card col-2 pb-3" style="background-color: #94c8d8">
-              <img id='futureIcon3' src="http://openweathermap.org/img/wn/10d@2x.png" class="card-img-top" alt="weather icon">
+            <div class="card col-lg-2 col-sm-12 pb-3" style="background-color: #94c8d8">
+              <img id='futureIcon3' src="" class="card-img-top" alt="weather icon">
               <div class="card-body">
                 <h5 class="card-title"><span id='futureDate3'>10/4/2021</span></h5>
                 <p class="card-text"><span id='futureForecast3'></span></p>
               </div>
                 <ul class="list-group list-group-flush">              
-                  <li class="list-group-item">Temp: <span id='futureTemp3'></li>
-                  <li class="list-group-item">Wind: <span id='futureWind3'></li>
-                  <li class="list-group-item">Humidity: <span id='futureHumidity3'></li>
+                  <li class="list-group-item">Temp:&nbsp;&nbsp;<span id='futureTemp3'></li>
+                  <li class="list-group-item">Wind:&nbsp;&nbsp;<span id='futureWind3'></li>
+                  <li class="list-group-item">Humidity:&nbsp;&nbsp;<span id='futureHumidity3'></li>
               </ul>
             </div>
-            <div class="card col-2 pb-3" style="background-color: #94c8d8">
-              <img id='futureIcon4' src="http://openweathermap.org/img/wn/10d@2x.png" class="card-img-top" alt="weather icon">
+            <div class="card col-lg-2 col-sm-12 pb-3" style="background-color: #94c8d8">
+              <img id='futureIcon4' src="" class="card-img-top" alt="weather icon">
               <div class="card-body">
                 <h5 class="card-title"><span id='futureDate4'>10/4/2021</span></h5>
                 <p class="card-text"><span id='futureForecast4'></span></p>
               </div>
                 <ul class="list-group list-group-flush">              
-                  <li class="list-group-item">Temp: <span id='futureTemp4'></li>
-                  <li class="list-group-item">Wind: <span id='futureWind4'></li>
-                  <li class="list-group-item">Humidity: <span id='futureHumidity4'></li>
+                  <li class="list-group-item">Temp:&nbsp;&nbsp;<span id='futureTemp4'></li>
+                  <li class="list-group-item">Wind:&nbsp;&nbsp;<span id='futureWind4'></li>
+                  <li class="list-group-item">Humidity:&nbsp;&nbsp;<span id='futureHumidity4'></li>
               </ul>
             </div>
-            <div class="card col-2 pb-3" style="background-color: #94c8d8">
-              <img id='futureIcon5' src="http://openweathermap.org/img/wn/10d@2x.png" class="card-img-top" alt="weather icon">
+            <div class="card col-lg-2 col-sm-12 pb-3" style="background-color: #94c8d8">
+              <img id='futureIcon5' src="" class="card-img-top" alt="weather icon">
               <div class="card-body">
                 <h5 class="card-title"><span id='futureDate5'>10/4/2021</span></h5>
                 <p class="card-text"><span id='futureForecast5'></span></p>
               </div>
                 <ul class="list-group list-group-flush">              
-                  <li class="list-group-item">Temp: <span id='futureTemp5'></li>
-                  <li class="list-group-item">Wind: <span id='futureWind1'></li>
-                  <li class="list-group-item">Humidity: <span id='futureHumidity5'></li>
+                  <li class="list-group-item">Temp:&nbsp;&nbsp;<span id='futureTemp5'></li>
+                  <li class="list-group-item">Wind:&nbsp;&nbsp;<span id='futureWind5'></li>
+                  <li class="list-group-item">Humidity:&nbsp;&nbsp;<span id='futureHumidity5'></li>
               </ul>
             </div>
             

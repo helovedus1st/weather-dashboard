@@ -16,13 +16,9 @@ var uviFound = document.querySelector('#uvi')
 var dateFound = document.querySelector('#todays-date')
 var forecastFound = document.querySelector('#forecast')
 var iconFound = document.querySelector('#icon');
+var revealAllFound = document.querySelector("#all-found");
 
-var futureIcon1Found = document.querySelector('#futureIcon1');
-var futureDate1Found = document.querySelector('#futureDate1');
-var futureForecast1Found = document.querySelector('#futureForecast1');
-var futureTemp1Found = document.querySelector('#futureTemp1');
-var futureWind1Found = document.querySelector('#futureWind1');
-var futureHumidity1Found = document.querySelector('#futureHumidity1');
+
 
 
 
@@ -30,6 +26,7 @@ var futureHumidity1Found = document.querySelector('#futureHumidity1');
 function getLatLong(event) {
     event.preventDefault();
     console.log(event);
+    revealAllFound.classList.remove("d-none");
     var city = searchInput.value.trim();
 
     var coordinatesUrl = rootUrl + '/geo/1.0/direct?q=' + city + "&limit=5&appid=" + apiKey;
@@ -76,7 +73,10 @@ function getFutureWeather1(lat, lon) {
     })
     .then(function (data) {
         console.log(data);
-        showFuture1(data.daily[1].temp.day, data.daily[1].wind_speed, data.daily[1].humidity, data.daily[1].dt, data.daily[1].weather[0].main, data.daily[1].weather[0].icon);
+        for (var i = 1; i < 6; i++) {
+            showFuture(data.daily[i].temp.day, data.daily[i].wind_speed, data.daily[i].humidity, data.daily[i].dt, data.daily[i].weather[0].main, data.daily[i].weather[0].icon, i);
+        }
+        
     });
 }
 
@@ -89,19 +89,30 @@ function showCurrent(temp, wind, humidity, weatherDate, uvi, forecast, icon) {
         windFound.textContent = wind + ' mph';
         humidityFound.textContent = humidity + '%';
         uviFound.textContent = uvi;
+        if (uvi > 5 && uvi < 8) {
+            uviFound.classList.add("alert-warning")
+         } else if (uvi >= 8) {
+            uviFound.classList.add("alert-danger")
+         }
         forecastFound.textContent = forecast;
         document.getElementById("icon").src = "http://openweathermap.org/img/wn/" + icon +"@4x.png";
     
 }
 
-function showFuture1(futureTemp1, futureWind1, futureHumidity1, futureDate1, futureForecast1, futureIcon1) {
-        var convertedDate = new Date(futureDate1*1000).toLocaleDateString("en-US");
-        futureDate1Found.textContent = convertedDate;
-        futureTemp1Found.textContent = futureTemp1 + '°F';
-        futureWind1Found.textContent = futureWind1 + ' mph';
-        futureHumidity1Found.textContent = futureHumidity1 + '%';
-        futureForecast1Found.textContent = futureForecast1;
-        document.getElementById("futureIcon1").src = "http://openweathermap.org/img/wn/" + futureIcon1 +"@4x.png";
+function showFuture(futureTemp, futureWind, futureHumidity, futureDate, futureForecast, futureIcon, i) {
+    var futureIconFound = document.querySelector('#futureIcon' + i);
+    var futureDateFound = document.querySelector('#futureDate' + i);
+    var futureForecastFound = document.querySelector('#futureForecast' + i);
+    var futureTempFound = document.querySelector('#futureTemp' + i);
+    var futureWindFound = document.querySelector('#futureWind' + i);
+    var futureHumidityFound = document.querySelector('#futureHumidity' + i);
+        var convertedDate = new Date(futureDate*1000).toLocaleDateString("en-US");
+        futureDateFound.textContent = convertedDate;
+        futureTempFound.textContent = futureTemp + '°F';
+        futureWindFound.textContent = futureWind + ' mph';
+        futureHumidityFound.textContent = futureHumidity + '%';
+        futureForecastFound.textContent = futureForecast;
+        futureIconFound.src = "http://openweathermap.org/img/wn/" + futureIcon +"@4x.png";
     
 }
 
