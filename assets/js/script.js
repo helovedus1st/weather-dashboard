@@ -129,6 +129,23 @@ function showFuture(futureTemp, futureWind, futureHumidity, futureDate, futureFo
 
 function makeHistoryButton(lat, lon, cityName, state) {
     console.log(lat, lon, cityName, state);
+    //create a button
+    var historyButton = document.createElement('button');
+    //add label and lat-lon to button
+    historyButton.textContent = cityName + ', ' + state
+    historyButton.classList.add('history-button');
+    historyButton.setAttribute('data-lat:', lat);
+    historyButton.setAttribute('data-lon:', lon);
+    //need to create an event lister that somehow has an id that grabs the correct button
+    //data must go into local storage for retrieval at next page visit
+    //put button page
+    historyContainer.appendChild(historyButton);
+    //retrieve buttons and display them at next visit
+
 }
 
 searchForm.addEventListener('submit', getLatLong);
+
+//add eventListener for the div of history buttons
+historyContainer.addEventListener('click')
+//look for a class of history-button, getAttribute, call api function
