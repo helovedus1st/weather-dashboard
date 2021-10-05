@@ -5,3 +5,10 @@
   .list-group-item {
       background-color: #e6e6e6;
   }
+
+  .weather-hr {      
+    margin-top: .3rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 6px solid white;
+  }
