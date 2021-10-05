@@ -36,17 +36,19 @@ function getLatLong(event) {
             return response.json();
         })
         .then(function (data) {
+            if(!(data[0])){
+                alert ("City not found.\nPlease enter a valid city name.");}
             console.log(data);
             console.log(data[0].lat, data[0].lon);
-            getWeather(data[0].lat, data[0].lon);
+            getWeather(data[0].lat, data[0].lon, data[0].name, data[0].state);
             getFutureWeather1(data[0].lat, data[0].lon);
-            makeHistoryButton(data[0].lat, data[0].lon);
+            makeHistoryButton(data[0].lat, data[0].lon, data[0].name, data[0].state);
         });
 }
 
-function getWeather(lat, lon) {
+function getWeather(lat, lon, cityName, state) {
     console.log('inside getWeather() function');
-    console.log (lat, lon);
+    console.log (lat, lon, cityName, state);
 
     var cityUrl = rootUrl + '/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&units=imperial' + '&appid=' + apiKey
     console.log (cityUrl)
@@ -57,7 +59,7 @@ function getWeather(lat, lon) {
     })
     .then(function (data) {
         console.log(data);
-        showCurrent(data.current.temp, data.current.wind_speed, data.current.humidity, data.current.dt, data.current.uvi, data.current.weather[0].main, data.current.weather[0].icon);
+        showCurrent(data.current.temp, data.current.wind_speed, data.current.humidity, data.current.dt, data.current.uvi, data.current.weather[0].main, data.current.weather[0].icon, cityName, state);
     });
 }
 
@@ -81,11 +83,13 @@ function getFutureWeather1(lat, lon) {
     });
 }
 
-function showCurrent(temp, wind, humidity, weatherDate, uvi, forecast, icon) {
-        var city = searchInput.value.trim();
+function showCurrent(temp, wind, humidity, weatherDate, uvi, forecast, icon, cityName, state) {
         var convertedDate = new Date(weatherDate*1000).toLocaleDateString("en-US");
         dateFound.textContent = convertedDate;
-        cityFound.textContent = city;
+        if (state === undefined) {
+            state = ""
+        }
+        cityFound.textContent = cityName + ', ' + state;
         tempFound.textContent = temp + '°F';
         windFound.textContent = wind + ' mph';
         humidityFound.textContent = humidity + '%';
@@ -121,6 +125,10 @@ function showFuture(futureTemp, futureWind, futureHumidity, futureDate, futureFo
     // reveal hidden content elements after acquiring data
     revealAllFound.classList.remove("d-none");
     
+}
+
+function makeHistoryButton(lat, lon, cityName, state) {
+    console.log(lat, lon, cityName, state);
 }
 
 searchForm.addEventListener('submit', getLatLong);
