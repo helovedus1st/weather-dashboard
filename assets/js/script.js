@@ -1,9 +1,10 @@
-var searchHistory = [];
+//data for API calls
 var apiKey = 'a4220fb97dc10c679584bc6c652f5441';
 var rootUrl = 'https://api.openweathermap.org';
 
 var searchForm = document.querySelector('#search-form');
 var searchInput = document.querySelector('#search-input');
+
 var currentWeather = document.querySelector('#today');
 var forecastWeather = document.querySelector('#forecast');
 var historyContainer = document.querySelector('#history');
@@ -154,20 +155,20 @@ function makeHistoryButton(lat, lon, cityName, state) {
     //data must go into local storage for retrieval at next page visit
     //put button page
     historyContainer.prepend(historyButton);
-    //retrieve buttons and display them at next visit
-    
+
+    //send history buttons data to local storage
     localStorage.setItem(cityName, JSON.stringify({city: cityName, state: state, lat: lat, lon: lon}))
 }
 
+// event listener for search button to launch app
 searchForm.addEventListener('submit', getLatLong);
 
-
+// grab history button data from local storage and generate buttons
 $(function(){
     for(var i =0; i < localStorage.length; i++){
         var storedButtonData = JSON.parse(localStorage.getItem(localStorage.key(i)));
         console.log(storedButtonData.city)
         makeHistoryButton(storedButtonData.lat, storedButtonData.lon, storedButtonData.city, storedButtonData.state);
         //console.log(localStorage.getItem(localStorage.key(i)));
-      }
-      
+      }      
 });
