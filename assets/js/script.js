@@ -103,14 +103,16 @@ function showCurrent(temp, wind, humidity, weatherDate, uvi, forecast, icon, cit
         uviFound.textContent = uvi;
 
         // need to show colored alerts when UVI is outside of normal range
-        if (uvi > 5 && uvi < 8) {
-            uviFound.classList.add("alert-warning")
-         } else if (uvi >= 8) {
-            uviFound.classList.add("alert-danger")
-         }    
+        if (uvi <= 2) {
+            document.getElementById("uvi").className = "alert-success p-2";
+        } else if (uvi > 2 && uvi < 4) {
+            document.getElementById("uvi").className = "alert-warning p-2";
+        } else if (uvi >= 4) {
+            document.getElementById("uvi").className = "alert-danger p-2";
+        }
 }
 
-// place forecast weather on page, used i variable from getFutureWeather function to correspond to uniquely named divs and spans
+// place forecast weather data on page, used i variable from getFutureWeather function to correspond to uniquely named divs and spans
 function showFuture(futureTemp, futureWind, futureHumidity, futureDate, futureForecast, futureIcon, i) {
     var futureIconFound = document.querySelector('#futureIcon' + i);
     var futureDateFound = document.querySelector('#futureDate' + i);
@@ -129,48 +131,55 @@ function showFuture(futureTemp, futureWind, futureHumidity, futureDate, futureFo
     futureIconFound.src = "http://openweathermap.org/img/wn/" + futureIcon +"@4x.png";
     
     // reveal hidden content elements after acquiring data
-    revealAllFound.classList.remove("d-none");
-    
+    revealAllFound.classList.remove("d-none");    
 }
 
+// create buttons for each previously searched city and add to local storage
 function makeHistoryButton(lat, lon, cityName, state) {
-    console.log(lat, lon, cityName, state);
-    //create a button
+    
+    // strip undefined state info for non-U.S. cities
     if (state === undefined) {
         state = ""
     }
+
+    //create a button
     var historyButton = document.createElement('button');
-    //add label and lat-lon to button
+
+    //add label to button
     historyButton.textContent = cityName + ', ' + state
-    historyButton.classList.add('history-button', 'btn', 'btn-secondary', 'col-12', 'my-3', 'rounded');
+
+    // add styling for buttons
+    historyButton.classList.add('btn', 'btn-secondary', 'col-12', 'my-3', 'rounded');
+
+    // add html data for localstorage and history button functions
     historyButton.setAttribute('data-lat:', lat);
     historyButton.setAttribute('data-lon:', lon);
     historyButton.setAttribute('data-city', cityName);
     historyButton.setAttribute('data-state', state);
-    //need to create an event lister that somehow has an id that grabs the correct button
-    historyButton.addEventListener('click', function() {
-        console.log(this);
-        console.log(lat, lon, cityName, state);
-        getWeather(lat, lon, cityName, state);
-    
+
+    // create event lister on each button, feed data into function and run it
+    historyButton.addEventListener('click', function() {        
+        getWeather(lat, lon, cityName, state);    
     })
-    //data must go into local storage for retrieval at next page visit
-    //put button page
+
+    // put button on page with most recent at top
     historyContainer.prepend(historyButton);
 
     //send history buttons data to local storage
     localStorage.setItem(cityName, JSON.stringify({city: cityName, state: state, lat: lat, lon: lon}))
 }
 
-// event listener for search button to launch app
+// START HERE - event listener for search button to launch app
 searchForm.addEventListener('submit', getLatLong);
 
 // grab history button data from local storage and generate buttons
 $(function(){
-    for(var i =0; i < localStorage.length; i++){
+
+    // for loop to grab every item in local storage
+    for(var i = 0; i < localStorage.length; i++){
         var storedButtonData = JSON.parse(localStorage.getItem(localStorage.key(i)));
-        console.log(storedButtonData.city)
+
+        // send data to already created makeHistoryButton function        
         makeHistoryButton(storedButtonData.lat, storedButtonData.lon, storedButtonData.city, storedButtonData.state);
-        //console.log(localStorage.getItem(localStorage.key(i)));
       }      
 });
