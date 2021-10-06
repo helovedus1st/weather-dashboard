@@ -103,11 +103,11 @@ function showCurrent(temp, wind, humidity, weatherDate, uvi, forecast, icon, cit
         uviFound.textContent = uvi;
 
         // need to show colored alerts when UVI is outside of normal range
-        if (uvi <= 2) {
+        if (uvi <= 5) {
             document.getElementById("uvi").className = "alert-success p-2";
-        } else if (uvi > 2 && uvi < 4) {
+        } else if (uvi > 5 && uvi < 8) {
             document.getElementById("uvi").className = "alert-warning p-2";
-        } else if (uvi >= 4) {
+        } else if (uvi >= 8) {
             document.getElementById("uvi").className = "alert-danger p-2";
         }
 }
