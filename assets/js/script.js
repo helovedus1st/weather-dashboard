@@ -19,95 +19,98 @@ var forecastFound = document.querySelector('#forecast')
 var iconFound = document.querySelector('#icon');
 var revealAllFound = document.querySelector("#all-found");
 
-
-
-
-
-
+// need lat and long from city to pull weather data
 function getLatLong(event) {
     event.preventDefault();
-    console.log(event);
     var city = searchInput.value.trim();
 
+    // piece together necessary url elements
     var coordinatesUrl = rootUrl + '/geo/1.0/direct?q=' + city + "&limit=5&appid=" + apiKey;
 
+    // grab lat lon and city state data
     fetch(coordinatesUrl)
         .then(function (response) {
-            console.log(response);
             return response.json();
         })
         .then(function (data) {
+            // prevent errant user entries from breaking app
             if(!(data[0])){
                 alert ("City not found.\nPlease enter a valid city name.");}
-            console.log(data);
-            console.log(data[0].lat, data[0].lon);
-            getWeather(data[0].lat, data[0].lon, data[0].name, data[0].state);
             
+            // feed data to functions
+            getWeather(data[0].lat, data[0].lon, data[0].name, data[0].state);
             makeHistoryButton(data[0].lat, data[0].lon, data[0].name, data[0].state);
         });
 }
 
+// grab weather data
 function getWeather(lat, lon, cityName, state) {
-    console.log('inside getWeather() function');
-    console.log (lat, lon, cityName, state);
-
+    
+    // again piece together correct url for API
     var cityUrl = rootUrl + '/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&units=imperial' + '&appid=' + apiKey
-    console.log (cityUrl)
 
     fetch(cityUrl)
     .then(function (response) {
         return response.json();
     })
     .then(function (data) {
-        console.log(data);
+        
+        // feed data to functions
         showCurrent(data.current.temp, data.current.wind_speed, data.current.humidity, data.current.dt, data.current.uvi, data.current.weather[0].main, data.current.weather[0].icon, cityName, state);
     });
     getFutureWeather(lat, lon);
 }
 
+// separate function to pull data for five-day forecast
 function getFutureWeather(lat, lon) {
-    console.log('inside getFutureWeather() function');
-    console.log (lat, lon);
 
     var cityUrl = rootUrl + '/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&units=imperial' + '&appid=' + apiKey
-    console.log (cityUrl)
 
     fetch(cityUrl)
     .then(function (response) {
         return response.json();
     })
     .then(function (data) {
-        console.log(data);
+
+        // need to grab data for all five days
         for (var i = 1; i < 6; i++) {
             showFuture(data.daily[i].temp.day, data.daily[i].wind_speed, data.daily[i].humidity, data.daily[i].dt, data.daily[i].weather[0].main, data.daily[i].weather[0].icon, i);
-        }
-        
+        }        
     });
 }
 
+// display my data in five day forecast
 function showCurrent(temp, wind, humidity, weatherDate, uvi, forecast, icon, cityName, state) {
-        console.log('inside showcurrent');
-        console.log(temp, wind, humidity, weatherDate, uvi, forecast, icon, cityName, state);
+
+        // convert date of weather forecast into usable date for display
         var convertedDate = new Date(weatherDate*1000).toLocaleDateString("en-US");
         dateFound.textContent = convertedDate;
+
+        // change state data for non-U.S. cities so it doesn't say undefined
         if (state === undefined) {
             state = ""
         }
+
+        //placing data into approriate divs or spans
         cityFound.textContent = cityName + ', ' + state;
         tempFound.textContent = temp + '°F';
         windFound.textContent = wind + ' mph';
         humidityFound.textContent = humidity + '%';
+        forecastFound.textContent = forecast;
+
+        // grab large icon based on weather
+        document.getElementById("icon").src = "http://openweathermap.org/img/wn/" + icon +"@4x.png";
         uviFound.textContent = uvi;
+
+        // need to show colored alerts when UVI is outside of normal range
         if (uvi > 5 && uvi < 8) {
             uviFound.classList.add("alert-warning")
          } else if (uvi >= 8) {
             uviFound.classList.add("alert-danger")
-         }
-        forecastFound.textContent = forecast;
-        document.getElementById("icon").src = "http://openweathermap.org/img/wn/" + icon +"@4x.png";
-    
+         }    
 }
 
+// place forecast weather on page, used i variable from getFutureWeather function to correspond to uniquely named divs and spans
 function showFuture(futureTemp, futureWind, futureHumidity, futureDate, futureForecast, futureIcon, i) {
     var futureIconFound = document.querySelector('#futureIcon' + i);
     var futureDateFound = document.querySelector('#futureDate' + i);
@@ -119,7 +122,6 @@ function showFuture(futureTemp, futureWind, futureHumidity, futureDate, futureFo
     // source date data must be converted from unix timestamp to US format
     var convertedDate = new Date(futureDate*1000).toLocaleDateString("en-US");
     futureDateFound.textContent = convertedDate;
-
     futureTempFound.textContent = futureTemp + '°F';
     futureWindFound.textContent = futureWind + ' mph';
     futureHumidityFound.textContent = futureHumidity + '%';
