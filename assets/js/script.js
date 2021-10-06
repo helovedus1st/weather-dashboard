@@ -41,7 +41,7 @@ function getLatLong(event) {
             console.log(data);
             console.log(data[0].lat, data[0].lon);
             getWeather(data[0].lat, data[0].lon, data[0].name, data[0].state);
-            getFutureWeather1(data[0].lat, data[0].lon);
+            
             makeHistoryButton(data[0].lat, data[0].lon, data[0].name, data[0].state);
         });
 }
@@ -61,9 +61,10 @@ function getWeather(lat, lon, cityName, state) {
         console.log(data);
         showCurrent(data.current.temp, data.current.wind_speed, data.current.humidity, data.current.dt, data.current.uvi, data.current.weather[0].main, data.current.weather[0].icon, cityName, state);
     });
+    getFutureWeather(lat, lon);
 }
 
-function getFutureWeather1(lat, lon) {
+function getFutureWeather(lat, lon) {
     console.log('inside getFutureWeather() function');
     console.log (lat, lon);
 
@@ -84,6 +85,8 @@ function getFutureWeather1(lat, lon) {
 }
 
 function showCurrent(temp, wind, humidity, weatherDate, uvi, forecast, icon, cityName, state) {
+        console.log('inside showcurrent');
+        console.log(temp, wind, humidity, weatherDate, uvi, forecast, icon, cityName, state);
         var convertedDate = new Date(weatherDate*1000).toLocaleDateString("en-US");
         dateFound.textContent = convertedDate;
         if (state === undefined) {
@@ -130,22 +133,41 @@ function showFuture(futureTemp, futureWind, futureHumidity, futureDate, futureFo
 function makeHistoryButton(lat, lon, cityName, state) {
     console.log(lat, lon, cityName, state);
     //create a button
+    if (state === undefined) {
+        state = ""
+    }
     var historyButton = document.createElement('button');
     //add label and lat-lon to button
     historyButton.textContent = cityName + ', ' + state
-    historyButton.classList.add('history-button');
+    historyButton.classList.add('history-button', 'btn', 'btn-secondary', 'col-12', 'my-3', 'rounded');
     historyButton.setAttribute('data-lat:', lat);
     historyButton.setAttribute('data-lon:', lon);
+    historyButton.setAttribute('data-city', cityName);
+    historyButton.setAttribute('data-state', state);
     //need to create an event lister that somehow has an id that grabs the correct button
+    historyButton.addEventListener('click', function() {
+        console.log(this);
+        console.log(lat, lon, cityName, state);
+        getWeather(lat, lon, cityName, state);
+    
+    })
     //data must go into local storage for retrieval at next page visit
     //put button page
-    historyContainer.appendChild(historyButton);
+    historyContainer.prepend(historyButton);
     //retrieve buttons and display them at next visit
-
+    
+    localStorage.setItem(cityName, JSON.stringify({city: cityName, state: state, lat: lat, lon: lon}))
 }
 
 searchForm.addEventListener('submit', getLatLong);
 
-//add eventListener for the div of history buttons
-historyContainer.addEventListener('click')
-//look for a class of history-button, getAttribute, call api function
+
+$(function(){
+    for(var i =0; i < localStorage.length; i++){
+        var storedButtonData = JSON.parse(localStorage.getItem(localStorage.key(i)));
+        console.log(storedButtonData.city)
+        makeHistoryButton(storedButtonData.lat, storedButtonData.lon, storedButtonData.city, storedButtonData.state);
+        //console.log(localStorage.getItem(localStorage.key(i)));
+      }
+      
+});
